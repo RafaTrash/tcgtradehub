@@ -19,31 +19,7 @@ import {
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-// Define mock CardEntryForm component since the actual one isn't available yet
-const CardEntryForm = ({ onSubmit, initialValues }) => {
-  // This is a placeholder component that will be replaced with the actual implementation
-  return (
-    <div className="p-4 border rounded">
-      <p className="mb-4">Card Entry Form Placeholder</p>
-      <Button
-        onClick={() =>
-          onSubmit(
-            initialValues || {
-              name: "New Card",
-              set: "Default Set",
-              condition: "Near Mint",
-              quantity: 1,
-              imageUrl:
-                "https://images.unsplash.com/photo-1614785246339-c60c6807f88f?w=400&q=80",
-            },
-          )
-        }
-      >
-        {initialValues ? "Save Changes" : "Add Card"}
-      </Button>
-    </div>
-  );
-};
+import CardEntryForm from "./CardEntryForm";
 
 interface CardItem {
   id: string;
