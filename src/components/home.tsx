@@ -12,10 +12,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, LogIn, Menu, Plus, Search, User } from "lucide-react";
 import CardInventory from "./CardInventory";
 import MatchDiscovery from "./MatchDiscovery";
+import AuthModal from "./auth/AuthModal";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("inventory");
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -67,7 +70,12 @@ const HomePage = () => {
                 <AvatarFallback>U</AvatarFallback>
               </Avatar>
             ) : (
-              <Button onClick={() => setIsLoggedIn(true)}>
+              <Button
+                onClick={() => {
+                  setIsRegisterMode(false);
+                  setAuthModalOpen(true);
+                }}
+              >
                 <LogIn className="mr-2 h-4 w-4" /> Login
               </Button>
             )}
@@ -112,6 +120,14 @@ const HomePage = () => {
           <p>© 2023 TCG Trade Platform. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onLogin={() => setIsLoggedIn(true)}
+        isRegister={isRegisterMode}
+      />
     </div>
   );
 };
@@ -147,10 +163,23 @@ const WelcomeSection = ({ onLogin = () => {} }) => {
             />
           </div>
           <div className="flex justify-center gap-4">
-            <Button size="lg" onClick={onLogin}>
+            <Button
+              size="lg"
+              onClick={() => {
+                setIsRegisterMode(false);
+                setAuthModalOpen(true);
+              }}
+            >
               Login
             </Button>
-            <Button size="lg" variant="outline" onClick={onLogin}>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => {
+                setIsRegisterMode(true);
+                setAuthModalOpen(true);
+              }}
+            >
               Register
             </Button>
           </div>
