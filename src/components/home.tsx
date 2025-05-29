@@ -13,12 +13,58 @@ import { Bell, LogIn, Menu, Plus, Search, User } from "lucide-react";
 import CardInventory from "./CardInventory";
 import MatchDiscovery from "./MatchDiscovery";
 import AuthModal from "./auth/AuthModal";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("inventory");
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [loginError, setLoginError] = useState("");
+  const [user, setUser] = useState(null); // Store user info if needed
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    avatar: user?.avatar || "",
+  });
+  const [editError, setEditError] = useState("");
+
+  const handleLoginChange = (e) => {
+    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+    try {
+      const res = await fetch("http://localhost:4000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginForm),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLoginError(data.error || "Login failed");
+        return;
+      }
+      // Save user session (in state or localStorage)
+      setUser(data.user);
+      setIsLoggedIn(true);
+      setActiveTab("inventory"); // Move to My Inventory
+      setLoginModalOpen(false);  // Close modal
+    } catch {
+      setLoginError("Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,20 +108,41 @@ const HomePage = () => {
               <Bell className="h-5 w-5" />
             </Button>
             {isLoggedIn ? (
-              <Avatar>
-                <AvatarImage
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=user123"
-                  alt="User"
-                />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage
+                      src="https://api.dicebear.com/7.x/avataaars/svg?seed=user123"
+                      alt="User"
+                    />
+                    <AvatarFallback>U</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => {
+                    setEditForm({
+                      name: user?.name || "",
+                      email: user?.email || "",
+                      avatar: user?.avatar || "",
+                    });
+                    setEditProfileOpen(true);
+                  }}>
+                    Edit Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setIsLoggedIn(false);
+                      setUser(null);
+                      setActiveTab("inventory");
+                    }}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
-              <Button
-                onClick={() => {
-                  setIsRegisterMode(false);
-                  setAuthModalOpen(true);
-                }}
-              >
+              <Button onClick={() => setLoginModalOpen(true)}>
                 <LogIn className="mr-2 h-4 w-4" /> Login
               </Button>
             )}
@@ -86,7 +153,10 @@ const HomePage = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-6">
         {!isLoggedIn ? (
-          <WelcomeSection onLogin={() => setIsLoggedIn(true)} />
+          <WelcomeSection
+            onLogin={() => setLoginModalOpen(true)}
+            onRegister={() => setRegisterModalOpen(true)}
+          />
         ) : (
           <div className="space-y-8">
             {/* Mobile Tabs */}
@@ -121,18 +191,127 @@ const HomePage = () => {
         </div>
       </footer>
 
-      {/* Auth Modal */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        onLogin={() => setIsLoggedIn(true)}
-        isRegister={isRegisterMode}
-      />
+      {/* Login Modal */}
+      <Dialog open={loginModalOpen} onOpenChange={setLoginModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Login</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4" onSubmit={handleLoginSubmit}>
+            <div>
+              <label className="block mb-1">Email</label>
+              <input
+                className="w-full border rounded px-2 py-1"
+                name="email"
+                type="email"
+                value={loginForm.email}
+                onChange={handleLoginChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Password</label>
+              <input
+                className="w-full border rounded px-2 py-1"
+                name="password"
+                type="password"
+                value={loginForm.password}
+                onChange={handleLoginChange}
+                required
+              />
+            </div>
+            {loginError && <div className="text-red-500">{loginError}</div>}
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Registration Modal */}
+      <Dialog open={registerModalOpen} onOpenChange={setRegisterModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Register</DialogTitle>
+          </DialogHeader>
+          <RegistrationForm onSuccess={() => setRegisterModalOpen(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Profile Modal */}
+      <Dialog open={editProfileOpen} onOpenChange={setEditProfileOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Profile</DialogTitle>
+          </DialogHeader>
+          <form
+            className="space-y-4"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setEditError("");
+              try {
+                // Call your backend to update user info (implement /api/profile in backend)
+                const res = await fetch("http://localhost:4000/api/profile", {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(editForm),
+                });
+                if (!res.ok) {
+                  const data = await res.json();
+                  setEditError(data.error || "Update failed");
+                  return;
+                }
+                // Update user state
+                setUser({ ...user, ...editForm });
+                setEditProfileOpen(false);
+              } catch {
+                setEditError("Update failed");
+              }
+            }}
+          >
+            <div>
+              <label className="block mb-1">Name</label>
+              <input
+                className="w-full border rounded px-2 py-1"
+                name="name"
+                value={editForm.name}
+                onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Email</label>
+              <input
+                className="w-full border rounded px-2 py-1"
+                name="email"
+                type="email"
+                value={editForm.email}
+                onChange={e => setEditForm({ ...editForm, email: e.target.value })}
+                required
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Avatar Image URL</label>
+              <input
+                className="w-full border rounded px-2 py-1"
+                name="avatar"
+                type="url"
+                value={editForm.avatar}
+                onChange={e => setEditForm({ ...editForm, avatar: e.target.value })}
+              />
+            </div>
+            {editError && <div className="text-red-500">{editError}</div>}
+            <Button type="submit" className="w-full">
+              Save Changes
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
-const WelcomeSection = ({ onLogin = () => {} }) => {
+const WelcomeSection = ({ onLogin = () => {}, onRegister = () => {} }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <Card className="w-full max-w-3xl">
@@ -163,23 +342,10 @@ const WelcomeSection = ({ onLogin = () => {} }) => {
             />
           </div>
           <div className="flex justify-center gap-4">
-            <Button
-              size="lg"
-              onClick={() => {
-                setIsRegisterMode(false);
-                setAuthModalOpen(true);
-              }}
-            >
+            <Button size="lg" onClick={() => setLoginModalOpen(true)}>
               Login
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => {
-                setIsRegisterMode(true);
-                setAuthModalOpen(true);
-              }}
-            >
+            <Button size="lg" variant="outline" onClick={onRegister}>
               Register
             </Button>
           </div>
@@ -299,6 +465,77 @@ const TradeRequestsSection = () => {
         ))}
       </div>
     </div>
+  );
+};
+
+const RegistrationForm = ({ onSuccess }) => {
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const res = await fetch("http://localhost:4000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Registration failed");
+        return;
+      }
+      alert("Registered!");
+      onSuccess();
+    } catch (err) {
+      setError("Registration failed");
+    }
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <label className="block mb-1">Name</label>
+        <input
+          className="w-full border rounded px-2 py-1"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <label className="block mb-1">Email</label>
+        <input
+          className="w-full border rounded px-2 py-1"
+          name="email"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      <div>
+        <label className="block mb-1">Password</label>
+        <input
+          className="w-full border rounded px-2 py-1"
+          name="password"
+          type="password"
+          value={form.password}
+          onChange={handleChange}
+          required
+        />
+      </div>
+      {error && <div className="text-red-500">{error}</div>}
+      <Button type="submit" className="w-full">
+        Register
+      </Button>
+    </form>
   );
 };
 

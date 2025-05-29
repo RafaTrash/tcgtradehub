@@ -58,14 +58,15 @@ const CardEntryForm: React.FC<CardEntryFormProps> = ({
 
   // Mock card sets for the dropdown
   const cardSets = [
-    { value: "base-set", label: "Base Set" },
-    { value: "jungle", label: "Jungle" },
-    { value: "fossil", label: "Fossil" },
-    { value: "team-rocket", label: "Team Rocket" },
-    { value: "gym-heroes", label: "Gym Heroes" },
-    { value: "modern-horizons", label: "Modern Horizons" },
-    { value: "throne-of-eldraine", label: "Throne of Eldraine" },
-    { value: "kamigawa-neon-dynasty", label: "Kamigawa: Neon Dynasty" },
+    { value: "DRI", label: "Rivais Predestinados" },
+    { value: "JTG", label: "Amigos de Jornada" },
+    { value: "PRE", label: "Evoluções Prismáticas" },
+    { value: "SSP", label: "Fagulhas Impetuosas" },
+    { value: "SCR", label: "Coroa Estelar" },
+    { value: "TWM", label: "Máscaras do Crepúsculo" },
+    { value: "PAF", label: "Destinos de Paldea" },
+    { value: "SFA", label: "Fábulas Nebulosas" },
+    { value: "TEF", label: "Forças Temporais" },
   ];
 
   // Mock search function
