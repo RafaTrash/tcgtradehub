@@ -72,6 +72,30 @@ app.put("/api/profile", async (req, res) => {
   }
 });
 
+// New: Cards schema
+const cardSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  imageUrl: String,
+});
+
+const Card = mongoose.model("Card", cardSchema);
+
+// New: Get cards endpoint
+app.get("/api/cards", async (req, res) => {
+  try {
+    const { search } = req.query;
+    let query = {};
+    if (search) {
+      query = { name: { $regex: search, $options: "i" } };
+    }
+    const cards = await Card.find(query);
+    res.json(cards);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao buscar cartas" });
+  }
+});
+
 app.listen(4000, () => {
   console.log("Backend running on http://localhost:4000");
 });

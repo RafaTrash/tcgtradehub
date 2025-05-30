@@ -35,6 +35,8 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+    volumes:
+      - ./frontend/public/cards:/app/public/cards
 
 volumes:
   mongo_data:

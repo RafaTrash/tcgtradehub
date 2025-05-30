@@ -97,19 +97,19 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
     <div className="w-full max-w-7xl mx-auto p-4 bg-background">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-2">
-          <h1 className="text-3xl font-bold">Match Discovery</h1>
+          <h1 className="text-3xl font-bold">Descoberta de Trocas</h1>
           <p className="text-muted-foreground">
-            Find potential trades with other users based on your cards
+            Encontre possíveis trocas com outros usuários com base nas suas cartas
           </p>
         </div>
 
-        {/* Filters and Search */}
+        {/* Filtros e Busca */}
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search cards or users..."
+                placeholder="Buscar cartas ou usuários..."
                 className="pl-8"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -126,10 +126,10 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
               onValueChange={(value) => setFilter({ ...filter, game: value })}
             >
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Game" />
+                <SelectValue placeholder="Jogo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Games</SelectItem>
+                <SelectItem value="all">Todos os Jogos</SelectItem>
                 <SelectItem value="pokemon">Pokémon</SelectItem>
                 <SelectItem value="magic">Magic: The Gathering</SelectItem>
                 <SelectItem value="yugioh">Yu-Gi-Oh!</SelectItem>
@@ -141,14 +141,14 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
               onValueChange={(value) => setFilter({ ...filter, rarity: value })}
             >
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Rarity" />
+                <SelectValue placeholder="Raridade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Rarities</SelectItem>
-                <SelectItem value="common">Common</SelectItem>
-                <SelectItem value="uncommon">Uncommon</SelectItem>
-                <SelectItem value="rare">Rare</SelectItem>
-                <SelectItem value="ultra-rare">Ultra Rare</SelectItem>
+                <SelectItem value="all">Todas as Raridades</SelectItem>
+                <SelectItem value="common">Comum</SelectItem>
+                <SelectItem value="uncommon">Incomum</SelectItem>
+                <SelectItem value="rare">Rara</SelectItem>
+                <SelectItem value="ultra-rare">Ultra Rara</SelectItem>
               </SelectContent>
             </Select>
 
@@ -159,20 +159,20 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
               }
             >
               <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Condition" />
+                <SelectValue placeholder="Condição" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Conditions</SelectItem>
-                <SelectItem value="mint">Mint</SelectItem>
-                <SelectItem value="near-mint">Near Mint</SelectItem>
-                <SelectItem value="good">Good</SelectItem>
-                <SelectItem value="played">Played</SelectItem>
+                <SelectItem value="all">Todas as Condições</SelectItem>
+                <SelectItem value="mint">Nova (Mint)</SelectItem>
+                <SelectItem value="near-mint">Quase Nova (Near Mint)</SelectItem>
+                <SelectItem value="good">Boa</SelectItem>
+                <SelectItem value="played">Jugada</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        {/* Matches List */}
+        {/* Lista de Matches */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredMatches.length > 0 ? (
             filteredMatches.map((match) => (
@@ -195,8 +195,7 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
                       </div>
                     </div>
                     <Badge variant="outline" className="ml-auto">
-                      {match.cardsOffered.length + match.cardsRequested.length}{" "}
-                      Cards
+                      {match.cardsOffered.length + match.cardsRequested.length} Cartas
                     </Badge>
                   </div>
                 </CardHeader>
@@ -204,8 +203,8 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
                 <CardContent className="pb-2">
                   <Tabs defaultValue="offered">
                     <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="offered">They Offer</TabsTrigger>
-                      <TabsTrigger value="requested">They Want</TabsTrigger>
+                      <TabsTrigger value="offered">Cartas Oferecidas</TabsTrigger>
+                      <TabsTrigger value="requested">Cartas Desejadas</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="offered" className="mt-2">
@@ -280,7 +279,7 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
                   <div className="flex justify-between w-full">
                     <Button variant="outline" size="sm" className="gap-1">
                       <MessageSquare className="h-4 w-4" />
-                      Message
+                      Mensagem
                     </Button>
                     <Dialog>
                       <DialogTrigger asChild>
@@ -289,25 +288,24 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
                           className="gap-1"
                           onClick={() => setSelectedMatch(match)}
                         >
-                          Propose Trade
+                          Propor Troca
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[500px]">
                         <DialogHeader>
                           <DialogTitle>
-                            Propose Trade with {selectedMatch?.name}
+                            Propor Troca com {selectedMatch?.name}
                           </DialogTitle>
                           <DialogDescription>
-                            Review the cards you want to trade and request from
-                            this user.
+                            Revise as cartas que você deseja trocar e solicitar deste usuário.
                           </DialogDescription>
                         </DialogHeader>
 
                         <div className="grid gap-4 py-4">
                           <div>
                             <h3 className="text-sm font-medium mb-2">
-                              Cards They're Offering:
+                              Cartas que está oferecendo:
                             </h3>
                             <div className="space-y-2">
                               {selectedMatch?.cardsOffered.map((card) => (
@@ -341,7 +339,7 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
 
                           <div>
                             <h3 className="text-sm font-medium mb-2">
-                              Cards They Want:
+                              Cartas que deseja:
                             </h3>
                             <div className="space-y-2">
                               {selectedMatch?.cardsRequested.map((card) => (
@@ -375,8 +373,8 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
                         </div>
 
                         <DialogFooter>
-                          <Button variant="outline">Cancel</Button>
-                          <Button>Send Trade Request</Button>
+                          <Button variant="outline">Cancelar</Button>
+                          <Button>Enviar Solicitação de Troca</Button>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
@@ -389,10 +387,11 @@ const MatchDiscovery = ({ matches = defaultMatches }: MatchDiscoveryProps) => {
               <div className="rounded-full bg-muted p-6 mb-4">
                 <Search className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">No matches found</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Nenhuma correspondência encontrada
+              </h3>
               <p className="text-muted-foreground max-w-md">
-                Try adjusting your filters or add more cards to your inventory
-                to find potential trades.
+                Tente ajustar seus filtros ou adicione mais cartas ao seu inventário para encontrar possíveis trocas.
               </p>
             </div>
           )}

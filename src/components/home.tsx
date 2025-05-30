@@ -73,7 +73,7 @@ const HomePage = () => {
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <Menu className="h-6 w-6 md:hidden" />
-            <h1 className="text-xl font-bold">TCG Trade Platform</h1>
+            <h1 className="text-xl font-bold">Plataforma de Troca TCG</h1>
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -82,21 +82,21 @@ const HomePage = () => {
               onClick={() => setActiveTab("inventory")}
               className={activeTab === "inventory" ? "bg-accent" : ""}
             >
-              My Inventory
+              Meu Inventário
             </Button>
             <Button
               variant="ghost"
               onClick={() => setActiveTab("matches")}
               className={activeTab === "matches" ? "bg-accent" : ""}
             >
-              Match Discovery
+              Descobrir Trocas
             </Button>
             <Button
               variant="ghost"
               onClick={() => setActiveTab("trades")}
               className={activeTab === "trades" ? "bg-accent" : ""}
             >
-              Trade Requests
+              Solicitações de Troca
             </Button>
           </div>
 
@@ -113,7 +113,7 @@ const HomePage = () => {
                   <Avatar className="cursor-pointer">
                     <AvatarImage
                       src="https://api.dicebear.com/7.x/avataaars/svg?seed=user123"
-                      alt="User"
+                      alt="Usuário"
                     />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
@@ -127,7 +127,7 @@ const HomePage = () => {
                     });
                     setEditProfileOpen(true);
                   }}>
-                    Edit Profile
+                    Editar Perfil
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -137,13 +137,13 @@ const HomePage = () => {
                       setActiveTab("inventory");
                     }}
                   >
-                    Logout
+                    Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Button onClick={() => setLoginModalOpen(true)}>
-                <LogIn className="mr-2 h-4 w-4" /> Login
+                <LogIn className="mr-2 h-4 w-4" /> Entrar
               </Button>
             )}
           </div>
@@ -167,9 +167,9 @@ const HomePage = () => {
                 onValueChange={setActiveTab}
               >
                 <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="inventory">Inventory</TabsTrigger>
-                  <TabsTrigger value="matches">Matches</TabsTrigger>
-                  <TabsTrigger value="trades">Trades</TabsTrigger>
+                  <TabsTrigger value="inventory">Inventário</TabsTrigger>
+                  <TabsTrigger value="matches">Trocas</TabsTrigger>
+                  <TabsTrigger value="trades">Solicitações</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -187,7 +187,7 @@ const HomePage = () => {
       {/* Footer */}
       <footer className="border-t bg-background py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>© 2023 TCG Trade Platform. All rights reserved.</p>
+          <p>© 2023 Plataforma de Troca TCG. Todos os direitos reservados.</p>
         </div>
       </footer>
 
@@ -195,11 +195,11 @@ const HomePage = () => {
       <Dialog open={loginModalOpen} onOpenChange={setLoginModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Login</DialogTitle>
+            <DialogTitle>Entrar</DialogTitle>
           </DialogHeader>
           <form className="space-y-4" onSubmit={handleLoginSubmit}>
             <div>
-              <label className="block mb-1">Email</label>
+              <label className="block mb-1">E-mail</label>
               <input
                 className="w-full border rounded px-2 py-1"
                 name="email"
@@ -210,7 +210,7 @@ const HomePage = () => {
               />
             </div>
             <div>
-              <label className="block mb-1">Password</label>
+              <label className="block mb-1">Senha</label>
               <input
                 className="w-full border rounded px-2 py-1"
                 name="password"
@@ -222,7 +222,7 @@ const HomePage = () => {
             </div>
             {loginError && <div className="text-red-500">{loginError}</div>}
             <Button type="submit" className="w-full">
-              Login
+              Entrar
             </Button>
           </form>
         </DialogContent>
@@ -232,7 +232,7 @@ const HomePage = () => {
       <Dialog open={registerModalOpen} onOpenChange={setRegisterModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Register</DialogTitle>
+            <DialogTitle>Registrar</DialogTitle>
           </DialogHeader>
           <RegistrationForm onSuccess={() => setRegisterModalOpen(false)} />
         </DialogContent>
@@ -242,7 +242,7 @@ const HomePage = () => {
       <Dialog open={editProfileOpen} onOpenChange={setEditProfileOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogTitle>Editar Perfil</DialogTitle>
           </DialogHeader>
           <form
             className="space-y-4"
@@ -258,19 +258,19 @@ const HomePage = () => {
                 });
                 if (!res.ok) {
                   const data = await res.json();
-                  setEditError(data.error || "Update failed");
+                  setEditError(data.error || "Falha ao atualizar");
                   return;
                 }
                 // Update user state
                 setUser({ ...user, ...editForm });
                 setEditProfileOpen(false);
               } catch {
-                setEditError("Update failed");
+                setEditError("Falha ao atualizar");
               }
             }}
           >
             <div>
-              <label className="block mb-1">Name</label>
+              <label className="block mb-1">Nome</label>
               <input
                 className="w-full border rounded px-2 py-1"
                 name="name"
@@ -280,7 +280,7 @@ const HomePage = () => {
               />
             </div>
             <div>
-              <label className="block mb-1">Email</label>
+              <label className="block mb-1">E-mail</label>
               <input
                 className="w-full border rounded px-2 py-1"
                 name="email"
@@ -291,7 +291,7 @@ const HomePage = () => {
               />
             </div>
             <div>
-              <label className="block mb-1">Avatar Image URL</label>
+              <label className="block mb-1">URL do Avatar</label>
               <input
                 className="w-full border rounded px-2 py-1"
                 name="avatar"
@@ -302,7 +302,7 @@ const HomePage = () => {
             </div>
             {editError && <div className="text-red-500">{editError}</div>}
             <Button type="submit" className="w-full">
-              Save Changes
+              Salvar Alterações
             </Button>
           </form>
         </DialogContent>
@@ -317,36 +317,36 @@ const WelcomeSection = ({ onLogin = () => {}, onRegister = () => {} }) => {
       <Card className="w-full max-w-3xl">
         <CardHeader>
           <CardTitle className="text-3xl">
-            Welcome to TCG Trade Platform
+            Bem-vindo à Plataforma de Troca TCG
           </CardTitle>
           <CardDescription className="text-xl">
-            Connect with other collectors and trade your cards efficiently
+            Conecte-se com outros colecionadores e troque suas cartas de forma eficiente
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-6 md:grid-cols-3">
             <FeatureCard
-              title="Register Your Cards"
-              description="Add cards you want to trade and cards you're looking for"
+              title="Cadastre suas cartas"
+              description="Adicione cartas para troca e cartas que você procura"
               icon={<Plus className="h-10 w-10" />}
             />
             <FeatureCard
-              title="Find Matches"
-              description="Our system automatically finds users with complementary needs"
+              title="Encontre Trocas"
+              description="Nosso sistema encontra automaticamente usuários com interesses complementares"
               icon={<Search className="h-10 w-10" />}
             />
             <FeatureCard
-              title="Complete Trades"
-              description="Connect with matched users and arrange your trades"
+              title="Complete Trocas"
+              description="Conecte-se com usuários compatíveis e realize suas trocas"
               icon={<User className="h-10 w-10" />}
             />
           </div>
           <div className="flex justify-center gap-4">
             <Button size="lg" onClick={() => setLoginModalOpen(true)}>
-              Login
+              Entrar
             </Button>
             <Button size="lg" variant="outline" onClick={onRegister}>
-              Register
+              Registrar
             </Button>
           </div>
         </CardContent>
@@ -393,13 +393,13 @@ const TradeRequestsSection = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Trade Requests</h2>
+        <h2 className="text-2xl font-bold">Solicitações de Troca</h2>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
-            Filter
+            Filtrar
           </Button>
           <Button variant="outline" size="sm">
-            Sort
+            Ordenar
           </Button>
         </div>
       </div>
@@ -422,14 +422,14 @@ const TradeRequestsSection = () => {
                 <span
                   className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${request.status === "pending" ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"}`}
                 >
-                  {request.status === "pending" ? "Pending" : "Accepted"}
+                  {request.status === "pending" ? "Pendente" : "Aceita"}
                 </span>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <h4 className="font-medium mb-2">They are offering:</h4>
+                  <h4 className="font-medium mb-2">Oferecendo:</h4>
                   <ul className="list-disc pl-5 space-y-1">
                     {request.offering.map((card, i) => (
                       <li key={i}>{card}</li>
@@ -437,7 +437,7 @@ const TradeRequestsSection = () => {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">They are requesting:</h4>
+                  <h4 className="font-medium mb-2">Solicitando:</h4>
                   <ul className="list-disc pl-5 space-y-1">
                     {request.requesting.map((card, i) => (
                       <li key={i}>{card}</li>
@@ -447,17 +447,17 @@ const TradeRequestsSection = () => {
               </div>
               <div className="mt-4 flex justify-end gap-2">
                 <Button variant="outline" size="sm">
-                  Message
+                  Mensagem
                 </Button>
                 {request.status === "pending" ? (
                   <>
                     <Button variant="destructive" size="sm">
-                      Decline
+                      Recusar
                     </Button>
-                    <Button size="sm">Accept</Button>
+                    <Button size="sm">Aceitar</Button>
                   </>
                 ) : (
-                  <Button size="sm">View Details</Button>
+                  <Button size="sm">Ver Detalhes</Button>
                 )}
               </div>
             </CardContent>
@@ -487,20 +487,20 @@ const RegistrationForm = ({ onSuccess }) => {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Registration failed");
+        setError(data.error || "Falha no cadastro");
         return;
       }
-      alert("Registered!");
+      alert("Cadastro realizado!");
       onSuccess();
     } catch (err) {
-      setError("Registration failed");
+      setError("Falha no cadastro");
     }
   };
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div>
-        <label className="block mb-1">Name</label>
+        <label className="block mb-1">Nome</label>
         <input
           className="w-full border rounded px-2 py-1"
           name="name"
@@ -510,7 +510,7 @@ const RegistrationForm = ({ onSuccess }) => {
         />
       </div>
       <div>
-        <label className="block mb-1">Email</label>
+        <label className="block mb-1">E-mail</label>
         <input
           className="w-full border rounded px-2 py-1"
           name="email"
@@ -521,7 +521,7 @@ const RegistrationForm = ({ onSuccess }) => {
         />
       </div>
       <div>
-        <label className="block mb-1">Password</label>
+        <label className="block mb-1">Senha</label>
         <input
           className="w-full border rounded px-2 py-1"
           name="password"
@@ -533,7 +533,7 @@ const RegistrationForm = ({ onSuccess }) => {
       </div>
       {error && <div className="text-red-500">{error}</div>}
       <Button type="submit" className="w-full">
-        Register
+        Registrar
       </Button>
     </form>
   );

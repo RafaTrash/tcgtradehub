@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -31,54 +31,12 @@ interface CardItem {
 }
 
 interface CardInventoryProps {
-  cardsToTrade?: CardItem[];
-  cardsWanted?: CardItem[];
   onAddCard?: (type: "trade" | "wanted", card: Omit<CardItem, "id">) => void;
   onEditCard?: (type: "trade" | "wanted", card: CardItem) => void;
   onDeleteCard?: (type: "trade" | "wanted", cardId: string) => void;
 }
 
 const CardInventory: React.FC<CardInventoryProps> = ({
-  cardsToTrade = [
-    {
-      id: "1",
-      name: "Black Lotus",
-      set: "Alpha",
-      condition: "Near Mint",
-      quantity: 1,
-      imageUrl:
-        "https://images.unsplash.com/photo-1614785246339-c60c6807f88f?w=400&q=80",
-    },
-    {
-      id: "2",
-      name: "Charizard",
-      set: "Base Set",
-      condition: "Good",
-      quantity: 2,
-      imageUrl:
-        "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=400&q=80",
-    },
-  ],
-  cardsWanted = [
-    {
-      id: "3",
-      name: "Mox Ruby",
-      set: "Beta",
-      condition: "Any",
-      quantity: 1,
-      imageUrl:
-        "https://images.unsplash.com/photo-1627626775846-122b778965ae?w=400&q=80",
-    },
-    {
-      id: "4",
-      name: "Blastoise",
-      set: "Base Set",
-      condition: "Mint",
-      quantity: 1,
-      imageUrl:
-        "https://images.unsplash.com/photo-1628968434441-d9c8d344a532?w=400&q=80",
-    },
-  ],
   onAddCard = () => {},
   onEditCard = () => {},
   onDeleteCard = () => {},
@@ -87,6 +45,21 @@ const CardInventory: React.FC<CardInventoryProps> = ({
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [selectedCard, setSelectedCard] = useState<CardItem | null>(null);
+
+  // Novo estado para as cartas
+  const [cardsToTrade, setCardsToTrade] = useState<CardItem[]>([]);
+  const [cardsWanted, setCardsWanted] = useState<CardItem[]>([]);
+
+  // Buscar cartas da API ao montar o componente
+  useEffect(() => {
+    fetch("http://localhost:4000/api/cards")
+      .then((res) => res.json())
+      .then((data) => {
+        // Supondo que cada card tem um campo "type": "trade" ou "wanted"
+        setCardsToTrade(data.filter((c: CardItem) => c.type === "trade"));
+        setCardsWanted(data.filter((c: CardItem) => c.type === "wanted"));
+      });
+  }, []);
 
   const handleAddCard = (card: Omit<CardItem, "id">) => {
     onAddCard(activeTab as "trade" | "wanted", card);
@@ -111,18 +84,19 @@ const CardInventory: React.FC<CardInventoryProps> = ({
   return (
     <div className="w-full bg-background p-6 rounded-lg shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Card Inventory</h2>
+        <h2 className="text-2xl font-bold">Inventário de Cartas</h2>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2">
               <Plus size={16} />
-              Add Card
+              Adicionar Carta
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
               <DialogTitle>
-                Add New Card to {activeTab === "trade" ? "Trade" : "Wanted"}
+                Adicionar Nova Carta em{" "}
+                {activeTab === "trade" ? "Troca" : "Desejadas"}
               </DialogTitle>
             </DialogHeader>
             <CardEntryForm onSubmit={handleAddCard} />
@@ -137,22 +111,22 @@ const CardInventory: React.FC<CardInventoryProps> = ({
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="trade">Cards to Trade</TabsTrigger>
-          <TabsTrigger value="wanted">Cards Wanted</TabsTrigger>
+          <TabsTrigger value="trade">Cartas para Troca</TabsTrigger>
+          <TabsTrigger value="wanted">Cartas Desejadas</TabsTrigger>
         </TabsList>
 
         <TabsContent value="trade" className="mt-4">
           {cardsToTrade.length === 0 ? (
             <div className="text-center py-12 border border-dashed rounded-lg">
               <p className="text-muted-foreground">
-                No cards added to trade yet.
+                Nenhuma carta adicionada para troca ainda.
               </p>
               <Button
                 variant="outline"
                 className="mt-4"
                 onClick={() => setIsAddDialogOpen(true)}
               >
-                Add Your First Card
+                Adicione sua primeira carta
               </Button>
             </div>
           ) : (
@@ -173,14 +147,14 @@ const CardInventory: React.FC<CardInventoryProps> = ({
           {cardsWanted.length === 0 ? (
             <div className="text-center py-12 border border-dashed rounded-lg">
               <p className="text-muted-foreground">
-                No cards added to wanted list yet.
+                Nenhuma carta adicionada à lista de desejos ainda.
               </p>
               <Button
                 variant="outline"
                 className="mt-4"
                 onClick={() => setIsAddDialogOpen(true)}
               >
-                Add Your First Wanted Card
+                Adicione sua primeira carta desejada
               </Button>
             </div>
           ) : (
@@ -198,11 +172,11 @@ const CardInventory: React.FC<CardInventoryProps> = ({
         </TabsContent>
       </Tabs>
 
-      {/* Edit Card Dialog */}
+      {/* Editar Carta Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Edit Card</DialogTitle>
+            <DialogTitle>Editar Carta</DialogTitle>
           </DialogHeader>
           {selectedCard && (
             <CardEntryForm
@@ -245,7 +219,7 @@ const CardDisplay: React.FC<CardDisplayProps> = ({
       <CardContent className="pb-2 flex-grow">
         <div className="flex justify-between items-center">
           <Badge variant="outline">{card.condition}</Badge>
-          <span className="text-sm font-medium">Qty: {card.quantity}</span>
+          <span className="text-sm font-medium">Qtd: {card.quantity}</span>
         </div>
       </CardContent>
       <CardFooter className="pt-2 flex justify-end gap-2 border-t">

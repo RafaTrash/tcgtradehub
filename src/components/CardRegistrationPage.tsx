@@ -24,7 +24,7 @@ const CardRegistrationPage: React.FC = () => {
       id: "1",
       name: "Black Lotus",
       set: "Alpha",
-      condition: "Near Mint",
+      condition: "Quase Nova",
       quantity: 1,
       imageUrl:
         "https://images.unsplash.com/photo-1614785246339-c60c6807f88f?w=400&q=80",
@@ -33,7 +33,7 @@ const CardRegistrationPage: React.FC = () => {
       id: "2",
       name: "Charizard",
       set: "Base Set",
-      condition: "Good",
+      condition: "Boa",
       quantity: 2,
       imageUrl:
         "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=400&q=80",
@@ -45,7 +45,7 @@ const CardRegistrationPage: React.FC = () => {
       id: "3",
       name: "Mox Ruby",
       set: "Beta",
-      condition: "Any",
+      condition: "Qualquer",
       quantity: 1,
       imageUrl:
         "https://images.unsplash.com/photo-1627626775846-122b778965ae?w=400&q=80",
@@ -54,7 +54,7 @@ const CardRegistrationPage: React.FC = () => {
       id: "4",
       name: "Blastoise",
       set: "Base Set",
-      condition: "Mint",
+      condition: "Nova",
       quantity: 1,
       imageUrl:
         "https://images.unsplash.com/photo-1628968434441-d9c8d344a532?w=400&q=80",
@@ -103,7 +103,7 @@ const CardRegistrationPage: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8 bg-background">
-      <h1 className="text-3xl font-bold mb-6">My Card Collection</h1>
+      <h1 className="text-3xl font-bold mb-6">Minha Coleção de Cartas</h1>
 
       <CardInventory
         cardsToTrade={cardsToTrade}
@@ -113,11 +113,11 @@ const CardRegistrationPage: React.FC = () => {
         onDeleteCard={handleDeleteCard}
       />
 
-      {/* Edit Card Dialog */}
+      {/* Editar Carta Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Edit Card</DialogTitle>
+            <DialogTitle>Editar Carta</DialogTitle>
           </DialogHeader>
           {selectedCard && (
             <CardEntryForm
